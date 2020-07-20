@@ -71,8 +71,11 @@ public class frame extends JFrame{
                             p++;
                         }
                     }
+
                 Solver s = new Solver(arr);
-                update(s.solve());
+                if(s.checkfull()) {
+                    update(s.solve());
+                }
             }
         });
 

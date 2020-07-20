@@ -9,14 +9,73 @@ public class Solver {
     }
 
     public int[][] solve() {
-        int[][] arr2 = new int[9][9];
 
+        boolean changed = true;
 
+        while(changed) {
+            changed = false;
+            for(int i = 0; i < 9; i++) {
+                for(int k = 0; k < 9; k++) {
+                    ArrayList<Integer> opportunity = new ArrayList<Integer>();
+                    if(arr[i][k] == -1) {
+                        for(int t = 1; t <= 9; t++){
+                            if(checksingle(t,i,k)){
+                                opportunity.add(t);
+                            }
+                        }
 
-        return arr2;
+                        if(opportunity.size() == 1) {
+                            arr[i][k] = opportunity.get(0);
+                            changed = true;
+                        }
+                    }
+                    System.out.println(opportunity.toString() + ((k+1)+((i)*9)));
+                }
+            }
+        }
+
+        solveBacktrack(0,0);
+
+        return arr;
     }
 
-    public boolean checkfull(int[][] arr) {
+    public boolean solveBacktrack(int posX, int posY){
+        posY += posX / 9;
+        posX = posX % 9;
+
+        if(posY >= 9) {
+            System.out.println("abgebrochen" + (posX+1) + (posY+1));
+            return true;
+        }
+
+
+
+        while(arr[posX][posY] != -1) {
+
+            posX++;
+            posY += posX / 9;
+            posX = posX % 9;
+
+            if(posY >= 9) {
+                System.out.println("abgebrochen" + (posX+1) + (posY+1));
+                return true;
+            }
+        }
+
+        for(int i = 1; i <= 9; i++) {
+            if(checksingle(i,posX,posY)){
+                arr[posX][posY] = i;
+                System.out.println((posX+1) + "||" + (posY +1) + " die " + i + " passt!");
+                if(solveBacktrack(posX+1,posY)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public boolean checkfull() {
         for(int i = 0; i < 3; i++) {
             for(int z = 0; z < 3; z++) {
                 ArrayList<Boolean> arrbool = new ArrayList<Boolean>();
@@ -63,24 +122,33 @@ public class Solver {
                         return false;
                     }
                 }
-
-
             }
         }
 
         return true;
     }
 
-    public boolean checksingle(int[][] arr, int k, int posX, int posY) {
-        for(int i = posX+1; i < 9; i++) {
+    public boolean checksingle(int k, int posX, int posY) {
+        for(int i = 0; i < 9; i++) {
             if(arr[i][posY] == k) {
                 return false;
             }
         }
 
-        for(int i = posY; i < 9; i++) {
+        for(int i = 0; i < 9; i++) {
             if(arr[posX][i] == k) {
                 return false;
+            }
+        }
+
+        posX -= posX % 3;
+        posY -= posY % 3;
+
+        for(int i = posY; i < posY+3; i++) {
+            for(int z = posX; z < posX+3; z++) {
+                if(arr[z][i] == k) {
+                    return false;
+                }
             }
         }
 
