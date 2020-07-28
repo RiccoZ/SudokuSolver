@@ -65,6 +65,8 @@ public class frame extends JFrame{
                         for (int z = 0; z < 9; z++) {
                             if (!(fieldarr.get(p).getText().isEmpty())) {
                                 arr[z][i] = Integer.parseInt(fieldarr.get(p).getText());
+                                fieldarr.get(p).setForeground(Color.RED);
+
                             }else {
                                 arr[z][i] = -1;
                             }

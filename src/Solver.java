@@ -10,30 +10,6 @@ public class Solver {
 
     public int[][] solve() {
 
-        boolean changed = true;
-
-        while(changed) {
-            changed = false;
-            for(int i = 0; i < 9; i++) {
-                for(int k = 0; k < 9; k++) {
-                    ArrayList<Integer> opportunity = new ArrayList<Integer>();
-                    if(arr[i][k] == -1) {
-                        for(int t = 1; t <= 9; t++){
-                            if(checksingle(t,i,k)){
-                                opportunity.add(t);
-                            }
-                        }
-
-                        if(opportunity.size() == 1) {
-                            arr[i][k] = opportunity.get(0);
-                            changed = true;
-                        }
-                    }
-                    System.out.println(opportunity.toString() + ((k+1)+((i)*9)));
-                }
-            }
-        }
-
         solveBacktrack(0,0);
 
         return arr;
@@ -44,7 +20,6 @@ public class Solver {
         posX = posX % 9;
 
         if(posY >= 9) {
-            System.out.println("abgebrochen" + (posX+1) + (posY+1));
             return true;
         }
 
@@ -57,7 +32,6 @@ public class Solver {
             posX = posX % 9;
 
             if(posY >= 9) {
-                System.out.println("abgebrochen" + (posX+1) + (posY+1));
                 return true;
             }
         }
@@ -65,13 +39,12 @@ public class Solver {
         for(int i = 1; i <= 9; i++) {
             if(checksingle(i,posX,posY)){
                 arr[posX][posY] = i;
-                System.out.println((posX+1) + "||" + (posY +1) + " die " + i + " passt!");
                 if(solveBacktrack(posX+1,posY)) {
                     return true;
                 }
             }
         }
-
+        arr[posX][posY] = -1;
         return false;
     }
 
