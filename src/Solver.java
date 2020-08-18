@@ -25,21 +25,21 @@ public class Solver {
 
 
 
-        while(arr[posX][posY] != -1) {
+        while(arr[posX][posY] != -1) { // find next expty cell
 
             posX++;
             posY += posX / 9;
             posX = posX % 9;
 
             if(posY >= 9) {
-                return true;
+                return true;    // return true when completely solved
             }
         }
 
         for(int i = 1; i <= 9; i++) {
-            if(checksingle(i,posX,posY)){
+            if(checksingle(i,posX,posY)){ // put next available number in
                 arr[posX][posY] = i;
-                if(solveBacktrack(posX+1,posY)) {
+                if(solveBacktrack(posX+1,posY)) { // if next empty cell can't be filled, go 1 step backwards
                     return true;
                 }
             }
@@ -48,7 +48,7 @@ public class Solver {
         return false;
     }
 
-    public boolean checkfull() {
+    public boolean checkfull() { //check if Sudoku can exist like this
         for(int i = 0; i < 3; i++) {
             for(int z = 0; z < 3; z++) {
                 ArrayList<Boolean> arrbool = new ArrayList<Boolean>();
@@ -101,7 +101,7 @@ public class Solver {
         return true;
     }
 
-    public boolean checksingle(int k, int posX, int posY) {
+    public boolean checksingle(int k, int posX, int posY) { // check if number {k} can be put in {posX}{posY}
         for(int i = 0; i < 9; i++) {
             if(arr[i][posY] == k) {
                 return false;

@@ -12,7 +12,9 @@ import java.util.ArrayList;
 public class frame extends JFrame{
 
     Font font1 = new Font("SansSerif", Font.BOLD, 50);
+    Font font2 = new Font("SansSerif", Font.BOLD, 15);
     ArrayList<JTextField> fieldarr = new ArrayList<JTextField>();
+    JTextPane tfield = new JTextPane();
 
     public frame() {
         setBounds(100,100,900,800);
@@ -20,6 +22,9 @@ public class frame extends JFrame{
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(null);
 
+        tfield.setBounds(725,450,125,50);
+        tfield.setFont(font2);
+        tfield.setEditable(false);
 
         for(int i = 0; i < 9; i++) {
             for(int z = 0; z < 9; z++) {
@@ -75,30 +80,71 @@ public class frame extends JFrame{
                     }
 
                 Solver s = new Solver(arr);
+
                 if(s.checkfull()) {
                     update(s.solve());
+                    for(p = 0; p < 81; p++) {
+                        fieldarr.get(p).setEditable(false);
+                    }
+                    tfield.setText("Sudoku gelöst!");
+                    tfield.setForeground(Color.green);
+                } else {
+                    tfield.setText("Sudoku nicht lösbar!");
+                    tfield.setForeground(Color.red);
+                    for(p = 0; p < 81; p++) {
+                        fieldarr.get(p).setForeground(Color.black);
+                    }
                 }
             }
         });
 
         btnsolve.setBounds(725,650,125,50);
 
+        JButton btnreset = new JButton("Leeren");
+
+        btnreset.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                reset();
+            }
+        });
+
+        btnreset.setBounds(725,550,125,50);
+
         add(btnsolve);
+        add(btnreset);
+        add(tfield);
     }
 
     public void update(int[][] arr) {
         int p = 0;
         for(int i = 0; i < 9; i++) {
             for (int z = 0; z < 9; z++) {
-                fieldarr.get(p).setText(String.valueOf(arr[z][i]));
-                fieldarr.get(p).setEditable(false);
+                if(arr[z][i] == 0) {
+                    fieldarr.get(p).setText("");
+                }else {
+                    fieldarr.get(p).setText(String.valueOf(arr[z][i]));
+                }
                 p++;
             }
         }
     }
 
     private void reset() {
+        int p = 0;
+        int[][] arr = new int[9][9];
+        for(int i = 0; i < 9; i++) {
+            for (int z = 0; z < 9; z++) {
+                arr[i][z] = 0;
+                fieldarr.get(p).setEditable(true);
+                fieldarr.get(p).setForeground(Color.BLACK);
+                p++;
+            }
+        }
 
+        update(arr);
+        tfield.setText("Sudoku geleert!");
+        tfield.setForeground(Color.green);
     }
 
     public void paint(Graphics g) {
